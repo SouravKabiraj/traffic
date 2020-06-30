@@ -1,5 +1,7 @@
 package com.oopslab.traffic;
 
+import com.oopslab.traffic.commandInterface.FlatTextCommandInterfaceInterface;
+import com.oopslab.traffic.commandInterface.ICommandInterface;
 import com.oopslab.traffic.inputHandler.IFileInputHandler;
 import com.oopslab.traffic.inputHandler.TextFileInputHandler;
 import org.springframework.boot.SpringApplication;
@@ -14,8 +16,8 @@ public class TrafficApplication {
 
     public static void main(String[] args) throws IOException {
         ApplicationContext context = SpringApplication.run(TrafficApplication.class, args);
-        TripCommand tripCommand = context.getBean(TripCommand.class);
+        ICommandInterface flatTextCommandInterface = context.getBean(FlatTextCommandInterfaceInterface.class);
         IFileInputHandler inputHandler = context.getBean(TextFileInputHandler.class);
-        tripCommand.execute(inputHandler.getInputCommand(new File(args[0])));
+        flatTextCommandInterface.execute(inputHandler.getInputCommand(new File(args[0])));
     }
 }

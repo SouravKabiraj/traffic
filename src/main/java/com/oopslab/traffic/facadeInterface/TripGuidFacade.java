@@ -1,4 +1,4 @@
-package com.oopslab.traffic;
+package com.oopslab.traffic.facadeInterface;
 
 import com.oopslab.traffic.measurements.time.Time;
 import com.oopslab.traffic.measurements.velocity.Velocity;
@@ -16,23 +16,19 @@ import java.util.TreeSet;
 
 @Component
 public class TripGuidFacade {
-    public TripOption getBestTripOption(WeatherType weatherType, Velocity orbitOneTrafficSpeed, Velocity orbitTwoTrafficSpeed) {
+    public TripOption getTripOption(WeatherType weatherType, Velocity orbitOneTrafficSpeed, Velocity orbitTwoTrafficSpeed) {
         ArrayList<OrbitDecorator> orbitDecorators = new ArrayList<>();
-        orbitDecorators.add(getOrbit(weatherType, new OrbitOne(orbitOneTrafficSpeed)));
-        orbitDecorators.add(getOrbit(weatherType, new OrbitTwo(orbitTwoTrafficSpeed)));
-        TreeSet<TripOption> tripPossibilities = getAllTripPossibilities(getVehicles(), orbitDecorators);
-        return tripPossibilities.iterator().next();
+        orbitDecorators.add(getDecoratedOrbit(weatherType, new OrbitOne(orbitOneTrafficSpeed)));
+        orbitDecorators.add(getDecoratedOrbit(weatherType, new OrbitTwo(orbitTwoTrafficSpeed)));
+        TreeSet<TripOption> tripOptions = getAllTripOptions(getVehicles(), orbitDecorators);
+        return getBestTripOption(tripOptions);
     }
 
-    private List<Vehicle> getVehicles() {
-        ArrayList<Vehicle> list = new ArrayList<>();
-        list.add(new Car());
-        list.add(new Bike());
-        list.add(new Tuktuk());
-        return list;
+    private TripOption getBestTripOption(TreeSet<TripOption> tripOptions) {
+        return tripOptions.iterator().next();
     }
 
-    private TreeSet<TripOption> getAllTripPossibilities(List<Vehicle> vehicles, List<OrbitDecorator> orbitDecorators) {
+    private TreeSet<TripOption> getAllTripOptions(List<Vehicle> vehicles, List<OrbitDecorator> orbitDecorators) {
         TreeSet<TripOption> tripOptions = new TreeSet<>();
         orbitDecorators.forEach(orbit -> {
             vehicles.forEach(vehicle -> {
@@ -47,7 +43,15 @@ public class TripGuidFacade {
         return tripOptions;
     }
 
-    private OrbitDecorator getOrbit(WeatherType weatherType, Orbit orbit) {
+    private List<Vehicle> getVehicles() {
+        ArrayList<Vehicle> list = new ArrayList<>();
+        list.add(new Car());
+        list.add(new Bike());
+        list.add(new Tuktuk());
+        return list;
+    }
+
+    private OrbitDecorator getDecoratedOrbit(WeatherType weatherType, Orbit orbit) {
         switch (weatherType) {
             case RAINY:
                 return new RainyOrbit(orbit);
