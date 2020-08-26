@@ -15,7 +15,7 @@ public abstract class OrbitDecorator implements IOrbit, ITrackTimeCalculator {
     abstract boolean canDrive(Vehicle vehicle);
 
     @Override
-    public Time calculateOrbitTripTimeFor(Vehicle vehicle) throws Exception {
+    public Time calculateTripCompletionTimeBy(Vehicle vehicle) throws Exception {
         if (!canDrive(vehicle)) {
             throw new Exception();
         } else {

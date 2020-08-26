@@ -33,7 +33,7 @@ public class TripGuidFacade {
         orbitDecorators.forEach(orbit -> {
             vehicles.forEach(vehicle -> {
                 try {
-                    Time time = orbit.calculateOrbitTripTimeFor(vehicle);
+                    Time time = orbit.calculateTripCompletionTimeBy(vehicle);
                     tripOptions.add(new TripOption(vehicle, orbit, time));
                 } catch (Exception e) {
                     // Consuming Wrong Orbit Vehicle combination.
